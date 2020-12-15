@@ -1,0 +1,90 @@
+
+
+.App {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.scheduler {
+  border: 1px solid antiquewhite;
+  max-width: 21em;
+}
+
+.scheduler-title {
+  border: 1px solid antiquewhite;
+  text-align: center;
+}
+
+.scheduler-dates {
+  border: 1px solid antiquewhite;
+  width: 100%;
+  height: 3.2em;
+}
+
+.scheduler-arrow {
+  float: left;
+  margin-bottom: auto;
+  margin-top: auto;
+  cursor: pointer;
+  width: 2em;
+  text-align: center;
+}
+
+.scheduler-date {
+  float: left;
+  border: 1px solid antiquewhite;
+  cursor: pointer;
+  width: 2.3em;
+}
+
+.scheduler-date.selected {
+  border: 2px solid orange;
+}
+
+.scheduler-date.disabled {
+  color: gray;
+}
+
+.scheduler-date-day-of-month {
+  text-align: center;
+}
+
+.scheduler-date-day-of-week {
+  text-align: center;
+  font-size: 0.8em;
+  padding: 0.5em;
+}
+
+.scheduler-time-slots {
+  float:left;
+  width: 100%;
+  min-height: 10em;
+  max-height: 20em;
+  overflow: scroll;
+}
+
+.scheduler-time-slot {
+  cursor: pointer;
+  margin-top: 1em;
+  margin-left: 1em;
+  float: left;
+  height: 3em;
+  width: 3em;
+  overflow: hidden;
+  background-color: gray;
+}
+
+.scheduler-time-slot.selected {
+  background-color: orange;
+}
+
+.scheduler-time {
+  padding: 0.3em;
+  font-size: 0.9em;
+}
