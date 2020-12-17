@@ -1,3 +1,5 @@
+import {TimeSlot} from "../components/appointment-scheduler";
+
 export class DateUtil {
     /**
      * Given a date object,
@@ -106,7 +108,20 @@ export class DateUtil {
      * @param date
      */
     static hoursAndMinutesFromDate = (date: Date) => {
-        return date.getHours() + ":" + date.getMinutes();
+        let h = date.getHours();
+        let m = date.getMinutes();
+        let hours = '';
+        if ((h + "").length < 2) {
+            hours = '0';
+        }
+        hours += h;
+        let minutes = '';
+        if ((m + "").length < 2) {
+            minutes = '0';
+        }
+        minutes += m;
+
+        return hours + ":" + minutes;
     };
 
     /**
@@ -146,7 +161,40 @@ export class DateUtil {
      * Anytime today is not considered to be in the past.
      * @param d
      */
-    static pastDay = (d: Date) : boolean => {
+    static pastDay = (d: Date): boolean => {
         return d < new Date() && !DateUtil.withInDay(new Date(), [d]);
     };
+
+    /**
+     * Returns a deep copy of the date
+     * @param time
+     */
+    static getCopyOf(time: Date): Date {
+        return new Date(time.getTime());
+    }
+
+    static generateTimeSlots(date: Date, timeInterval: 15 | 30): Array<TimeSlot> {
+        let time = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        let nextDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+        let slots: Array<TimeSlot> = [];
+        while (time < nextDay) {
+            slots.push({
+                numMaxOccupied: 1, numOccupied: 0, slotWindow: timeInterval, time: DateUtil.getCopyOf(time)
+            });
+            time = new Date(time.getTime() + timeInterval * 60 * 1000);
+        }
+        return [...slots];
+    }
+
+
+    static generateTimeSlotsForDays(date: Date, timeInterval: 15 | 30, numOfDays: number): Array<TimeSlot> {
+        let time = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        let slots: Array<TimeSlot> = [];
+        for (let i = 0; i < numOfDays; i++) {
+            let d = new Date(time.getTime() + i * 24 * 3600 * 1000);
+            let slotsDay = DateUtil.generateTimeSlots(d, timeInterval);
+            slots = [...slots, ...slotsDay];
+        }
+        return [...slots];
+    }
 }

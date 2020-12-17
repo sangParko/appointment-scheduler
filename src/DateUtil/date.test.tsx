@@ -2,6 +2,7 @@ import React from 'react';
 import {
     DateUtil
 } from "./date";
+import {TimeSlot} from "../components/appointment-scheduler";
 
 test('gets day of week', () => {
     expect(DateUtil.getDayOfWeek(new Date('12/13/2020'))).toEqual('SUN');
@@ -95,7 +96,6 @@ test('datesIncludeDate', () => {
 });
 
 
-
 test('pastDay tells if the day is in the past or not', () => {
     const date = new Date(2020, 7, 5, 10, 30);
     expect(DateUtil.pastDay(date)).toBe(true);
@@ -103,7 +103,39 @@ test('pastDay tells if the day is in the past or not', () => {
     expect(DateUtil.pastDay(date2)).toBe(false);
 });
 
+test('generateTimeSlots generates time slots for a given day', () => {
+    const timeInterval = 30;
+    let timeSlots: Array<TimeSlot> = DateUtil.generateTimeSlots(new Date(), timeInterval);
+    expect(timeSlots.length).toBe(24 * 2);
+    expect((timeSlots[24 * 2 - 1].time).getHours()).toBe(23);
+    expect((timeSlots[24 * 2 - 1].time).getMinutes()).toBe(30);
+    expect((timeSlots[0].time).getTime() + 47 * 30 * 60 * 1000).toEqual((timeSlots[47].time).getTime());
+});
+
+test('generateTimeSlotsForDays generates time slots for days', () => {
+    const timeInterval = 30;
+    let startDay = new Date();
+    let timeSlots: Array<TimeSlot> = DateUtil.generateTimeSlotsForDays(startDay, timeInterval, 14);
+    expect(timeSlots.length).toBe(24 * 2 * 14);
+    expect((timeSlots[24 * 2 - 1].time).getHours()).toBe(23);
+    expect((timeSlots[24 * 2 - 1].time).getMinutes()).toBe(30);
+    expect((timeSlots[24 * 2 * 14 - 1].time).getHours()).toBe(23);
+    expect((timeSlots[24 * 2 * 14 - 1].time).getMinutes()).toBe(30);
+    expect((timeSlots[24 * 2 * 14 - 1].time).getTime()).toEqual((timeSlots[24 * 2 * 14 - 2].time).getTime() + timeInterval * 60 * 1000);
+    expect((timeSlots[24 * 2 * 14 - 1].time).getTime()).toEqual((timeSlots[24 * 2 * 2 - 1].time).getTime() + 12 * 24 * 3600 * 1000);
+    expect((timeSlots[24 * 2 * 14 - 1].time).getDate()).toBe(startDay.getDate() + 13);
+});
+
+test('getCopyOf returns a copy of given date', () => {
+    let day = new Date(1999, 5, 10);
+    expect(day.getTime()).toEqual(DateUtil.getCopyOf(day).getTime());
+    day = new Date(1999, 5, 10, 13);
+    expect(day.getTime()).toEqual(DateUtil.getCopyOf(day).getTime());
+    day = new Date(1999, 5, 10, 17, 30);
+    expect(day.getTime()).toEqual(DateUtil.getCopyOf(day).getTime());
+});
 
 
+//@todo use moment.js instead?
 
 

@@ -35,7 +35,7 @@ const AppointmentScheduler: React.FC<props> = ({currentDate, timeSlots, appointm
         setSelectedDate(new Date(selectedDate.getTime() + days * 60 * 60 * 1000 * 24));
     };
 
-    const handleDateClick = (slot: TimeSlot, ind: number) => {
+    const handleSlotClick = (slot: TimeSlot, ind: number) => {
         let timeSlotsCpy = [...timeSlotsOfSelectedDate];
         if (DateUtil.datesIncludeDate(appointments, slot.time)) {
             timeSlotsCpy[ind].numOccupied--;
@@ -104,7 +104,7 @@ const AppointmentScheduler: React.FC<props> = ({currentDate, timeSlots, appointm
                     timeSlotsOfSelectedDate && timeSlotsOfSelectedDate.map((slot, ind) =>
                         <div key={ind}
                              onClick={() => {
-                                 handleDateClick(slot, ind);
+                                 handleSlotClick(slot, ind);
                              }}
                              className={'scheduler-time-slot' + (slot.numOccupied >= slot.numMaxOccupied ? ' selected' : '')}>
                             <p className={'scheduler-time selected'}>

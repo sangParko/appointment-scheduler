@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import './App.css';
 import AppointmentScheduler, {TimeSlot} from './components/appointment-scheduler';
+import AppointmentSchedulerAdmin from './components/appointment-scheduler-admin';
 
 const defaultSlots: Array<TimeSlot> = [
     {
@@ -37,13 +38,27 @@ const defaultSlots: Array<TimeSlot> = [
 
 function App() {
     const [appointments, setAppointments] = useState<Array<Date>>([]);
+    const [timeSlots, setTimeSlots] = useState<Array<TimeSlot>>(defaultSlots);
+    const [adminTimeSlots, setAdminTimeSlots] = useState<Array<TimeSlot>>(defaultSlots);
+    const handleAdminTimeSlots = (slots: Array<TimeSlot>): void => {
+        setAdminTimeSlots(slots);
+        setTimeSlots([...slots.filter(s => s.numOccupied === 1)]);
+    };
+
     return (
         <div className="App">
             <AppointmentScheduler
                 currentDate={new Date()}
                 appointments={appointments}
                 setAppointments={setAppointments}
-                timeSlots={defaultSlots}
+                timeSlots={timeSlots}
+            />
+            <AppointmentSchedulerAdmin
+                currentDate={new Date()}
+                appointments={appointments}
+                setAppointments={setAppointments}
+                timeSlots={adminTimeSlots}
+                setTimeSlots={handleAdminTimeSlots}
             />
         </div>
     );
